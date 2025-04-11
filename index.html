@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>cURL 测试工具</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>cURL 测试工具</h1>
+            <button class="theme-toggle" onclick="toggleTheme()">
+                <span class="theme-icon">🌙</span>
+            </button>
+        </div>
+        <div class="form-section">
+            <div class="input-group">
+                <label for="url">请求 URL</label>
+                <input type="text" id="url" placeholder="https://api.example.com" required oninput="validateUrl()">
+                <span class="url-status"></span>
+            </div>
+            <div class="input-group">
+                <label for="method">请求方法</label>
+                <select id="method">
+                    <option value="GET">GET</option>
+                    <option value="POST">POST</option>
+                    <option value="PUT">PUT</option>
+                    <option value="DELETE">DELETE</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label for="headers">请求头 (JSON)</label>
+                <textarea id="headers" placeholder='{"Content-Type": "application/json"}' oninput="validateJson('headers')"></textarea>
+            </div>
+            <div class="input-group">
+                <label for="body">请求体</label>
+                <textarea id="body" placeholder='{"key": "value"}' oninput="validateJson('body')"></textarea>
+            </div>
+            <button class="send-btn" onclick="sendRequest()">
+                <span class="ripple"></span>
+                发送请求
+            </button>
+            <div class="error-message" id="error-message"></div>
+        </div>
+        <div class="response-section">
+            <div class="loader" id="loader"></div>
+            <h2>响应结果</h2>
+            <div class="tabs">
+                <button class="tab active" onclick="showTab('body')">Body</button>
+                <button class="tab" onclick="showTab('headers')">Headers</button>
+                <button class="tab" onclick="showTab('info')">Info</button>
+            </div>
+            <pre id="response-body" class="response-content active"></pre>
+            <pre id="response-headers" class="response-content"></pre>
+            <pre id="response-info" class="response-content"></pre>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
