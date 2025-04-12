@@ -16,6 +16,12 @@
         </div>
         <div class="form-section">
             <div class="input-group">
+                <label for="curl-input">输入 cURL 命令</label>
+                <textarea id="curl-input" placeholder="curl -X POST -H 'Content-Type: application/json' -d '{\"key\": \"value\"}' https://api.example.com" oninput="parseCurlCommand()"></textarea>
+                <button class="parse-btn" onclick="fillFormFromCurl()">填充表单</button>
+                <button class="test-btn" onclick="testCurlDirectly()">一键测试</button>
+            </div>
+            <div class="input-group">
                 <label for="url">请求 URL</label>
                 <input type="text" id="url" placeholder="https://api.example.com" required oninput="validateUrl()">
                 <span class="url-status"></span>
