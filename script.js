@@ -90,6 +90,55 @@ async function sendRequest() {
     }
 }
 
+function parseCurlCommand() {
+    const curlInput = document.getElementById('curl-input').value.trim();
+    const errorMessage = document.getElementById('error-message');
+    errorMessage.textContent = '';
+    errorMessage.classList.remove('show');
+
+    if (!curlInput.startsWith('curl ')) {
+        errorMessage.textContent = '请输入有效的 cURL 命令（以 "curl " 开头）';
+        errorMessage.classList.add('show');
+        return null;
+    }
+
+    try {
+        // 简单解析逻辑，假设命令格式规范
+        const args = curlInput.replace(/curl\s+/, '').match(/(?:[^\s"]+|"[^"]*")+/g) || [];
+        let url = '';
+        let method = 'GET';
+        const headers = {};
+        let body = '';
+
+        for (let i = 0; i < args.length; i++) {
+            const arg = args[i].replace(/^"|"$/g, '');
+            if (arg.startsWith('http://') || arg.startsWith('https://')) {
+                url = arg;
+            } else if (arg === '-X' || arg === '--request') {
+                method = args[++i].toUpperCase();
+            } else if (arg === '-H' || arg === '--header') {
+                const header = args[++i].replace(/^"|"$/g, '');
+                const [key, value] = header.split(':').map(s => s.trim());
+                headers[key] = value;
+            } else if (arg === '-d' || arg === '--data' || arg === '--data-raw') {
+                body = args[++i].replace(/^"|"$/g, '');
+            }
+        }
+
+        if (!url) {
+            errorMessage.textContent = 'cURL 命令中未找到有效的 URL';
+            errorMessage.classList.add('show');
+            return null;
+        }
+
+        return { url, method, headers, body };
+    } catch (e) {
+        errorMessage.textContent = '解析 cURL 命令失败，请检查格式';
+        errorMessage.classList.add('show');
+        return null;
+    }
+}
+
 function showTab(tabId) {
     document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
     document.querySelectorAll('.response-content').forEach(content => content.classList.remove('active'));
